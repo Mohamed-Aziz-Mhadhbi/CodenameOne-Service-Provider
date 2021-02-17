@@ -1,2 +1,2 @@
-# -Service-Provider
-Projet PiDev
+# CodenameONE Service-Provider
+codenameone PiDev
