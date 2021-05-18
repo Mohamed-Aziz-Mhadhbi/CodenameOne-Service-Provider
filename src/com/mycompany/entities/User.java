@@ -5,47 +5,45 @@
  */
 package com.mycompany.entities;
 
-/**
- *
- * @author youss
- */
+
 public class User {
         private int id;
 	private String userName;
-	private String userLastname;
-	private String userRole;
-	private String userEmail;
-	private String userPhone;
+	private String lastName;
+        private String firstName;
+	private String Role;
+	private String Email;
+	private int Phone;
 	private String password;
-	private String userPhoto;
-        private String userGender;
+	private String Photo;
+        private String specialisation;
 
     public User() {
     }
-        
-    
 
-    public User(int id, String userName, String userLastname, String userRole, String userEmail, String userPhone, String password, String userPhoto, String userGender) {
+    public User(int id, String userName, String lastName, String firstName, String Role, String Email, int Phone, String password, String Photo, String specialisation) {
         this.id = id;
         this.userName = userName;
-        this.userLastname = userLastname;
-        this.userRole = userRole;
-        this.userEmail = userEmail;
-        this.userPhone = userPhone;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.Role = Role;
+        this.Email = Email;
+        this.Phone = Phone;
         this.password = password;
-        this.userPhoto = userPhoto;
-        this.userGender = userGender;
+        this.Photo = Photo;
+        this.specialisation = specialisation;
     }
-
-    public User(String userName, String userLastname, String userRole, String userEmail, String userPhone, String password, String userPhoto, String userGender) {
+    
+    public User(String userName, String lastName, String firstName, String Role, String Email, int Phone, String password, String Photo, String specialisation) {
         this.userName = userName;
-        this.userLastname = userLastname;
-        this.userRole = userRole;
-        this.userEmail = userEmail;
-        this.userPhone = userPhone;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.Role = Role;
+        this.Email = Email;
+        this.Phone = Phone;
         this.password = password;
-        this.userPhoto = userPhoto;
-        this.userGender = userGender;
+        this.Photo = Photo;
+        this.specialisation = specialisation;
     }
 
     public int getId() {
@@ -64,36 +62,44 @@ public class User {
         this.userName = userName;
     }
 
-    public String getUserLastname() {
-        return userLastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setUserLastname(String userLastname) {
-        this.userLastname = userLastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getUserRole() {
-        return userRole;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setUserRole(String userRole) {
-        this.userRole = userRole;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getRole() {
+        return Role;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setRole(String Role) {
+        this.Role = Role;
     }
 
-    public String getUserPhone() {
-        return userPhone;
+    public String getEmail() {
+        return Email;
     }
 
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
+    public void setEmail(String Email) {
+        this.Email = Email;
+    }
+
+    public int getPhone() {
+        return Phone;
+    }
+
+    public void setPhone(int Phone) {
+        this.Phone = Phone;
     }
 
     public String getPassword() {
@@ -104,24 +110,23 @@ public class User {
         this.password = password;
     }
 
-    public String getUserPhoto() {
-        return userPhoto;
+    public String getPhoto() {
+        return Photo;
     }
 
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
+    public void setPhoto(String Photo) {
+        this.Photo = Photo;
     }
 
-    public String getUserGender() {
-        return userGender;
+    public String getSpecialisation() {
+        return specialisation;
     }
 
-    public void setUserGender(String userGender) {
-        this.userGender = userGender;
+    public void setSpecialisation(String specialisation) {
+        this.specialisation = specialisation;
     }
-    
-    
-    
+        
+     
     }
     
     

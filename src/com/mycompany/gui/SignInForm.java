@@ -21,14 +21,19 @@ package com.mycompany.gui;
 
 import com.codename1.components.FloatingHint;
 import com.codename1.ui.Button;
+import com.codename1.ui.Command;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.services.ServiceUser;
 
 /**
  * Sign in UI
@@ -48,7 +53,7 @@ public class SignInForm extends BaseForm {
         getTitleArea().setUIID("Container");
         setUIID("SignIn");
         
-       add(BorderLayout.NORTH, new Label(res.getImage("Logo.png"), "LogoLabel"));
+      // add(BorderLayout.NORTH, new Label(res.getImage("Logo.png"), "LogoLabel"));
       //add(BorderLayout.NORTH, new Label(res.getImage("page-header.png")));
         
         TextField username = new TextField("", "Username", 20, TextField.ANY);
@@ -72,7 +77,23 @@ public class SignInForm extends BaseForm {
         content.setScrollableY(true);
         add(BorderLayout.SOUTH, content);
         signIn.requestFocus();
-        signIn.addActionListener(e -> new NewsfeedForm(res).show());
+        signIn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                if (username.getText().length() == 0 || password.getText().length() == 0) {
+                        Dialog.show("Alert", "Please fill all the fields", new Command("OK"));                    
+                    }else {
+                    
+                        ServiceUser serviceUser =new ServiceUser();
+                        if (serviceUser.login(username.getText(), password.getText())) {
+                            new NewsfeedForm(res).show();
+                        }
+
+                }    
+            }
+        });
     }
     
 }
+
+

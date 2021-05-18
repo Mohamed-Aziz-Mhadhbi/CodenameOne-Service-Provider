@@ -21,16 +21,22 @@ package com.mycompany.gui;
 
 import com.codename1.components.FloatingHint;
 import com.codename1.ui.Button;
+import com.codename1.ui.Command;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.entities.User;
+import com.mycompany.services.ServiceUser;
 
 /**
  * Signup UI
@@ -49,10 +55,17 @@ public class SignUpForm extends BaseForm {
         tb.setBackCommand("", e -> previous.showBack());
         setUIID("SignIn");
                 
+        
         TextField username = new TextField("", "Username", 20, TextField.ANY);
         TextField email = new TextField("", "E-Mail", 20, TextField.EMAILADDR);
         TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
         TextField confirmPassword = new TextField("", "Confirm Password", 20, TextField.PASSWORD);
+        TextField firstName = new TextField("", "first name", 20, TextField.ANY);
+        TextField lastName = new TextField("", "last name", 20, TextField.ANY);
+        TextField specialisation = new TextField("", "specialisation", 20, TextField.ANY);
+        TextField phone = new TextField("", "phone number", 20, TextField.ANY);
+        firstName.setSingleLineTextArea(false);
+        lastName.setSingleLineTextArea(false);
         username.setSingleLineTextArea(false);
         email.setSingleLineTextArea(false);
         password.setSingleLineTextArea(false);
@@ -65,6 +78,10 @@ public class SignUpForm extends BaseForm {
         
         Container content = BoxLayout.encloseY(
                 new Label("Sign Up", "LogoLabel"),
+                new FloatingHint(firstName),
+                createLineSeparator(),
+                new FloatingHint(lastName),
+                createLineSeparator(),
                 new FloatingHint(username),
                 createLineSeparator(),
                 new FloatingHint(email),
@@ -72,6 +89,10 @@ public class SignUpForm extends BaseForm {
                 new FloatingHint(password),
                 createLineSeparator(),
                 new FloatingHint(confirmPassword),
+                createLineSeparator(),
+                new FloatingHint(specialisation),
+                createLineSeparator(),
+                new FloatingHint(phone),
                 createLineSeparator()
         );
         content.setScrollableY(true);
@@ -81,7 +102,21 @@ public class SignUpForm extends BaseForm {
                 FlowLayout.encloseCenter(alreadHaveAnAccount, signIn)
         ));
         next.requestFocus();
-        next.addActionListener(e -> new ActivateForm(res).show());
+        //next.addActionListener(e -> new ActivateForm(res).show());
+        next.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                if ((username.getText().length() == 0) || (firstName.getText().length() == 0) || (lastName.getText().length() == 0) || (email.getText().length() == 0) || (password.getText().length() == 0) || (confirmPassword.getText().length() == 0) || (phone.getText().length() == 0) || (specialisation.getText().length() == 0)) {
+                    Dialog.show("Alert", "Please fill all the fields", new Command("OK"));
+                }else{
+                    float phoneF = Float.parseFloat(phone.getText());
+                    User user= new User(username.getText(),lastName.getText(),firstName.getText(),"prestatire",email.getText(),(int)phoneF,password.getText(),"",specialisation.getText() );
+                    ServiceUser serviceUser =new ServiceUser();
+                    serviceUser.addUser(user);
+                }
+            }
+        });
+        
     }
     
 }

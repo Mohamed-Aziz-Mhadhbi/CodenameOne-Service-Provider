@@ -42,6 +42,9 @@ import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mycompany.entities.User;
+import com.mycompany.services.ServiceUser;
+import java.util.ArrayList;
 
 /**
  * The newsfeed form
@@ -49,13 +52,14 @@ import com.codename1.ui.util.Resources;
  * @author Shai Almog
  */
 public class NewsfeedForm extends BaseForm {
+    ArrayList<User> users = new ArrayList();
 
     public NewsfeedForm(Resources res) {
         super("Newsfeed", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Newsfeed");
+        setTitle("Home");
         getContentPane().setScrollVisible(false);
         
         super.addSideMenu(res);
@@ -65,8 +69,8 @@ public class NewsfeedForm extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("page-header.jpg"), spacer1, "15 Likes  ", "85 Comments", "Introduction à la programmation Java. ");
-        addTab(swipe, res.getImage("page-headerdeux.jpg"), spacer2, "100 Likes  ", "66 Comments", "Apprenez à programmer en Python en quelques étapes.");;
+        addTab(swipe, res.getImage("change to svg.png"), spacer1, null, null, "Service Provider ");
+        
                 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -138,14 +142,17 @@ public class NewsfeedForm extends BaseForm {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
         
-        addButton(res.getImage("page-header.jpg"), "Intro cours python.", false, 26, 32);
-        addButton(res.getImage("news-item-2.jpg"), "Cours en ligne de programmation Java.", true, 15, 21);
-        addButton(res.getImage("news-item-3.jpg"), "Introduction à la programmation en C pour les débutants.", false, 36, 15);
-        addButton(res.getImage("news-item-4.jpg"), "Introduction à la programmation web.", false, 11, 9);
-     /*  addButton(res.getImage("C-language.jpg"), "Introduction à la programmation en C pour les débutants.", false, 26, 32);
-        addButton(res.getImage("java-oracle.jpg"), "Cours en ligne de programmation Java.", true, 15, 21);
-        addButton(res.getImage("python-cours.jpg"), "Introduction au langage Python.", false, 36, 15);
-        addButton(res.getImage("html.jpg"), "Introduction à la programmation.", false, 11, 9);*/
+        
+        ServiceUser serviceUser = new ServiceUser();
+        users=serviceUser.getAllUsers();
+        
+        for (int counter = 0; counter < users.size(); counter++) {
+        
+            System.out.println(users.get(counter));
+            addfreelancer(res.getImage("avatar.png"), users.get(counter), res);
+        }
+        
+        
     }
     
     private void updateArrowPosition(Button b, Label arrow) {
@@ -163,14 +170,12 @@ public class NewsfeedForm extends BaseForm {
         Label likes = new Label(likesStr);
         Style heartStyle = new Style(likes.getUnselectedStyle());
         heartStyle.setFgColor(0xff2d55);
-        FontImage heartImage = FontImage.createMaterial(FontImage.MATERIAL_FAVORITE, heartStyle);
-        likes.setIcon(heartImage);
-        likes.setTextPosition(RIGHT);
+        
 
         Label comments = new Label(commentsStr);
         FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 2) {
-            img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 2);
+            img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
         ScaleImageLabel image = new ScaleImageLabel(img);
         image.setUIID("Container");
@@ -192,6 +197,30 @@ public class NewsfeedForm extends BaseForm {
 
         swipe.addTab("", page1);
     }
+    
+    
+    private void addfreelancer(Image img, User user,Resources res) {
+       int height = Display.getInstance().convertToPixels(11.5f);
+       int width = Display.getInstance().convertToPixels(14f);
+       Button image = new Button(img.fill(width, height));
+     //  image.setUIID("Label");
+       Container cnt = BorderLayout.west(image);
+       cnt.setLeadComponent(image);
+       TextArea ta = new TextArea(user.getFirstName()+" "+user.getLastName());
+       ta.setUIID("NewsTopLine");
+       ta.setEditable(false);
+
+       Label specialisationLabel = new Label("Specialisation : "+user.getSpecialisation());
+       specialisationLabel.setTextPosition(RIGHT);
+       
+       cnt.add(BorderLayout.CENTER, 
+               BoxLayout.encloseY(
+                       ta,
+                       BoxLayout.encloseX(specialisationLabel)
+               ));
+       add(cnt);
+       image.addActionListener(e -> new ProfileDetail(res,user).show());
+   }
     
    private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount) {
        int height = Display.getInstance().convertToPixels(11.5f);
