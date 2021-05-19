@@ -228,40 +228,18 @@ public class ServiceUser {
         User user = new User();
         String url = Statics.BASE_URL+"/jsonUserFind/"+username;
         req.setUrl(url);
-        System.out.println(url);
-        
-        req.addResponseListener((new ActionListener<NetworkEvent>() {
+        req.setPost(false);
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
-                JSONParser jsonp;
-                jsonp = new JSONParser();
-                
-                try {
-                    Map<String,Object>obj = jsonp.parseJSON(new CharArrayReader(new String(req.getResponseData()).toCharArray()));
-                    
-                    
-                    
-                    user.setUserName(obj.get("username").toString());
-                    user.setFirstName(obj.get("prenom").toString());
-                    user.setLastName(obj.get("nom").toString());
-                    user.setPassword(obj.get("password").toString());
-                    user.setEmail(obj.get("email").toString());
-                    
-                    user.setSpecialisation(obj.get("specialisation").toString());
-                    
-                } catch (IOException ex) {
-                    
-                }
+                users = parseTasks(new String(req.getResponseData()));
+                req.removeResponseListener(this);
             }
-        }));
-        
+        });
         NetworkManager.getInstance().addToQueueAndWait(req);
-        
-        if (user != null) {
-            if (BCrypt.checkpw(password, user.getPassword())){
-                return true;
-            }else
-                return false;
+        System.out.println(users.get(0).getPassword());
+        if (users.get(0) != null) {
+            return BCrypt.checkpw(password, users.get(0).getPassword());
         }
     
         return false;
