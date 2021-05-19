@@ -244,4 +244,23 @@ public class ServiceUser {
     
         return false;
     }
+    
+    public User findUser(String username){
+    User user = new User();
+        String url = Statics.BASE_URL+"/jsonUserFind/"+username;
+        req.setUrl(url);
+        req.setPost(false);
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                users = parseTasks(new String(req.getResponseData()));
+                req.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        
+        return users.get(0);
+    
+        
+    }
 }

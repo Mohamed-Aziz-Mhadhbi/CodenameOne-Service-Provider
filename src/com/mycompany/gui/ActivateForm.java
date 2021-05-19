@@ -87,7 +87,7 @@ public class ActivateForm extends BaseForm {
         content.setScrollableY(true);
         add(BorderLayout.SOUTH, content);
         signUp.requestFocus();
-        signUp.addActionListener(e -> new NewsfeedForm(res).show());
+        //signUp.addActionListener(e -> new NewsfeedForm(res).show());
     }
     
 }

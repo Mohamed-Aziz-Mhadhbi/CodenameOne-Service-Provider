@@ -20,13 +20,18 @@
 package com.mycompany.gui;
 
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.ui.Button;
 import com.codename1.ui.CheckBox;
+import com.codename1.ui.Command;
 import com.codename1.ui.Component;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -34,6 +39,9 @@ import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mycompany.entities.User;
+import com.mycompany.services.ServiceUser;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
  * The user profile form
@@ -42,7 +50,7 @@ import com.codename1.ui.util.Resources;
  */
 public class ProfileForm extends BaseForm {
 
-    public ProfileForm(Resources res) {
+    public ProfileForm(Resources res,User user) {
         super("Newsfeed", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -50,12 +58,12 @@ public class ProfileForm extends BaseForm {
         setTitle("Profile");
         getContentPane().setScrollVisible(false);
         
-        super.addSideMenu(res);
+        super.addSideMenu(res,user);
         
         tb.addSearchCommand(e -> {});
         
         
-        Image img = res.getImage("profile-background.jpg");
+        Image img = res.getImage("avatar.png");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
@@ -80,27 +88,53 @@ public class ProfileForm extends BaseForm {
                 )
         ));
 
-        TextField username = new TextField("sandeep");
+        TextField username = new TextField(user.getUserName());
         username.setUIID("TextFieldBlack");
         addStringValue("Username", username);
 
-        TextField email = new TextField("sandeep@gmail.com", "E-Mail", 20, TextField.EMAILADDR);
+        TextField email = new TextField(user.getEmail(), "E-Mail", 20, TextField.EMAILADDR);
         email.setUIID("TextFieldBlack");
         addStringValue("E-Mail", email);
         
-        TextField password = new TextField("sandeep", "Password", 20, TextField.PASSWORD);
+        TextField password = new TextField(user.getPassword(), "Password", 20, TextField.PASSWORD);
         password.setUIID("TextFieldBlack");
         addStringValue("Password", password);
-
-        CheckBox cb1 = CheckBox.createToggle(res.getImage("on-off-off.png"));
-        cb1.setUIID("Label");
-        cb1.setPressedIcon(res.getImage("on-off-on.png"));
-        CheckBox cb2 = CheckBox.createToggle(res.getImage("on-off-off.png"));
-        cb2.setUIID("Label");
-        cb2.setPressedIcon(res.getImage("on-off-on.png"));
         
-        addStringValue("Facebook", FlowLayout.encloseRightMiddle(cb1));
-        addStringValue("Twitter", FlowLayout.encloseRightMiddle(cb2));
+        TextField firstName = new TextField(user.getFirstName());
+        password.setUIID("TextFieldBlack");
+        addStringValue("firstname", firstName);
+        
+        TextField lastName = new TextField(user.getLastName());
+        password.setUIID("TextFieldBlack");
+        addStringValue("lastName", lastName);
+
+       TextField specialisation = new TextField(user.getSpecialisation());
+        password.setUIID("TextFieldBlack");
+        addStringValue("specialisation", specialisation);
+        
+        Button next = new Button("Next");
+        
+        next.requestFocus();
+        next.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                if ((username.getText().length() == 0) || (firstName.getText().length() == 0) || (lastName.getText().length() == 0) || (email.getText().length() == 0) || (password.getText().length() == 0)) {
+                    Dialog.show("Alert", "Please fill all the fields", new Command("OK"));
+                }else{
+                    user.setEmail(email.getText());
+                    user.setFirstName(firstName.getText());
+                    user.setLastName(lastName.getText());
+                    String hashedPassword = BCrypt.hashpw(password.getText(), BCrypt.gensalt(13));
+                    user.setPassword(hashedPassword);
+                  
+                    ServiceUser serviceUser =new ServiceUser();
+                    
+                    if (serviceUser.modifUser(user, user.getId())) {
+                        System.out.println(user.getEmail());
+                    }
+                }
+            }
+        });
     }
     
     private void addStringValue(String s, Component v) {

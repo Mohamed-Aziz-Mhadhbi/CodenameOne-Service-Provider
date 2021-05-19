@@ -86,7 +86,7 @@ public class SignInForm extends BaseForm {
                     
                         ServiceUser serviceUser =new ServiceUser();
                         if (serviceUser.login(username.getText(), password.getText())) {
-                            new NewsfeedForm(res).show();
+                            new NewsfeedForm(res,serviceUser.findUser(username.getText())).show();
                             
                         }else{
                             Dialog.show("Alert", "Please check your username or password", new Command("OK"));  

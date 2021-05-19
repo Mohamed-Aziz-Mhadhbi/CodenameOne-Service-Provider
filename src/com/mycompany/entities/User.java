@@ -45,6 +45,15 @@ public class User {
         this.Photo = Photo;
         this.specialisation = specialisation;
     }
+    
+    public User(String userName, String lastName, String firstName, String Email, String password) {
+        this.userName = userName;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.Email = Email;
+        this.password = password;
+
+    }
 
     public int getId() {
         return id;

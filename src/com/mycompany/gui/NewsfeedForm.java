@@ -53,8 +53,9 @@ import java.util.ArrayList;
  */
 public class NewsfeedForm extends BaseForm {
     ArrayList<User> users = new ArrayList();
+    private User findUser;
 
-    public NewsfeedForm(Resources res) {
+    public NewsfeedForm(Resources res,User user) {
         super("Newsfeed", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
@@ -62,7 +63,7 @@ public class NewsfeedForm extends BaseForm {
         setTitle("Home");
         getContentPane().setScrollVisible(false);
         
-        super.addSideMenu(res);
+        super.addSideMenu(res,user);
         tb.addSearchCommand(e -> {});
         
         Tabs swipe = new Tabs();
@@ -154,6 +155,8 @@ public class NewsfeedForm extends BaseForm {
         
         
     }
+
+    
     
     private void updateArrowPosition(Button b, Label arrow) {
         arrow.getUnselectedStyle().setMargin(LEFT, b.getX() + b.getWidth() / 2 - arrow.getWidth() / 2);
@@ -205,6 +208,7 @@ public class NewsfeedForm extends BaseForm {
        Button image = new Button(img.fill(width, height));
      //  image.setUIID("Label");
        Container cnt = BorderLayout.west(image);
+       
        cnt.setLeadComponent(image);
        TextArea ta = new TextArea(user.getFirstName()+" "+user.getLastName());
        ta.setUIID("NewsTopLine");

@@ -32,6 +32,8 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mycompany.entities.User;
+import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
  * Base class for the forms with common functionality
@@ -66,7 +68,7 @@ public class BaseForm extends Form {
         return separator;
     }
 
-    protected void addSideMenu(Resources res) {
+    protected void addSideMenu(Resources res,User user) {
         Toolbar tb = getToolbar();
         Image img = res.getImage("profile-background.jpg");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
@@ -82,8 +84,16 @@ public class BaseForm extends Form {
                         new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond"))
         ));
         
-        tb.addMaterialCommandToSideMenu("Newsfeed", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
-        tb.addMaterialCommandToSideMenu("Profile", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
+        tb.addMaterialCommandToSideMenu("Newsfeed", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res, user).show());
+        tb.addMaterialCommandToSideMenu("Profile", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res,user).show());
+        tb.addMaterialCommandToSideMenu("offre", FontImage.MATERIAL_SETTINGS, e -> new HomeFormOffre().show());
+        
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new WalkthruForm(res).show());
+    }
+
+
+
+    void addSideMenu(Resources res) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
