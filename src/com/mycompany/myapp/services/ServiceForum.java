@@ -46,8 +46,8 @@ public class ServiceForum {
     }
 
     public boolean addForum(Forum f) {
-       // http://127.0.0.1:8000/addFoumJSON/new?title=title&description=descrption
-        String url = Statics.BASE_URL + "/addForumJSON/new?title="+f.getTitle()+"&description="+ f.getDescription(); //création de l'URL
+        String url = Statics.BASE_URL+"/addFoumJSON/new?title="+f.getTitle()+"&description="+ f.getDescription(); //création de l'URL
+        System.out.println(url);
         req.setUrl(url);
         req.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
@@ -88,7 +88,7 @@ public class ServiceForum {
     }
 
     public ArrayList<Forum> getAllForums() {
-        String url = Statics.BASE_URL + "/AllForums";
+        String url = Statics.BASE_URL +"/AllForums";
         req.setUrl(url);
         req.setPost(false);
         req.addResponseListener(new ActionListener<NetworkEvent>() {
@@ -115,8 +115,8 @@ public class ServiceForum {
         NetworkManager.getInstance().addToQueueAndWait(req);
        
     }
-    public boolean modifForum(Forum f,int id ) {
-        String url = Statics.BASE_URL + "/updateForumJSON/"+id+"?title=" + f.getTitle() + "&description=" + f.getDescription(); //création de l'URL
+    public boolean modifForum(Forum f) {
+        String url = Statics.BASE_URL + "/updateForumJSON/"+f.getId()+"?title=" + f.getTitle() + "&description=" + f.getDescription(); //création de l'URL
         req.setUrl(url);
         req.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override

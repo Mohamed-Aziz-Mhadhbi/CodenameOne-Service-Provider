@@ -6,6 +6,7 @@
 package com.mycompany.myapp.gui;
 
 import com.codename1.io.Preferences;
+import static com.codename1.push.PushContent.setTitle;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
 import com.codename1.ui.Dialog;
@@ -15,46 +16,46 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BoxLayout;
+import com.mycompany.myapp.entities.Comment;
 import com.mycompany.myapp.entities.Forum;
 import com.mycompany.myapp.entities.Post;
+import com.mycompany.myapp.services.ServiceComment;
 import com.mycompany.myapp.services.ServiceForum;
-import com.mycompany.myapp.services.ServicePost;
 
 /**
  *
  * @author ASUS
  */
-public class ModifPostForm extends Form {
+public class ModifCommentForm extends Form{
+     Forum current;
 
-    
+    public ModifCommentForm(Form previous, Comment c,Post p,Forum f) {
 
-    public ModifPostForm(Form previous, Post p) {
-        setTitle("Update Post");
+        setTitle("Update Forum");
         setLayout(BoxLayout.y());
-        System.out.println("Post a modif " + p);
-        int id = p.getId();
-        System.out.println("id Post"+id);
-        TextField tfTitleM = new TextField();
-        TextField tfDescriptionM = new TextField();
-
-        Button btnValider = new Button("Update Post");
-
-        tfTitleM.setText(p.getTitle());
-        tfDescriptionM.setText(p.getDescription());
-
-        addAll(tfTitleM, tfDescriptionM, btnValider);
+        System.out.println("Comment a modif "+c);
+        int id = c.getId();
+        TextField tfContentM = new TextField();
+        TextField tfRatingM = new TextField();
+        
+        Button btnValider = new Button("Update Forum");
+        
+        tfContentM.setText(c.getContent() );
+        tfRatingM.setText(String.valueOf(c.getRating()));
+        
+        addAll(tfContentM, tfRatingM, btnValider);
         btnValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                if ((tfTitleM.getText().length() == 0) || (tfDescriptionM.getText().length() == 0)) {
+                if ((tfContentM.getText().length() == 0) || (tfRatingM.getText().length() == 0)) {
                     Dialog.show("Alert", "Please fill all the fields", new Command("OK"));
                 } else {
                     try {
 
-                        Post p = new Post(tfTitleM.getText(), tfDescriptionM.getText(), id);
-                        if (ServicePost.getInstance().modifPost(p)) {
+                        Comment c = new Comment(tfContentM.getText(), Integer.parseInt(tfRatingM.getText()),id);
+                        if (ServiceComment.getInstance().modifComment(c)) {
                             Dialog.show("Success", "Connection accepted", new Command("OK"));
-                            Preferences.clearAll();
+                            new ListeCommentForm(previous,p,f).show();
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));
                         }
@@ -67,7 +68,6 @@ public class ModifPostForm extends Form {
             }
         });
 
-      
-
+        
     }
 }

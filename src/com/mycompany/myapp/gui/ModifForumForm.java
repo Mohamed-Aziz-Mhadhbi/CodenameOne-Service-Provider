@@ -24,17 +24,23 @@ import com.mycompany.myapp.services.ServiceForum;
  */
 public class ModifForumForm extends Form {
 
-    static TextField tfTitleM = new TextField();
-    static TextField tfDescriptionM = new TextField();
-    static TextField tfIdM = new TextField();
     Forum current;
 
-    public ModifForumForm(Form previous) {
+    public ModifForumForm(Form previous, Forum f) {
 
         setTitle("Update Forum");
         setLayout(BoxLayout.y());
-
+        System.out.println("Forum a modif "+f);
+        int id = f.getId();
+        TextField tfTitleM = new TextField();
+        TextField tfDescriptionM = new TextField();
+        TextField tfIdM = new TextField();
+        
         Button btnValider = new Button("Update Forum");
+        
+        tfTitleM.setText(f.getTitle());
+        tfDescriptionM.setText(f.getDescription());
+        
         addAll(tfTitleM, tfDescriptionM, btnValider);
         btnValider.addActionListener(new ActionListener() {
             @Override
@@ -44,10 +50,11 @@ public class ModifForumForm extends Form {
                 } else {
                     try {
 
-                        Forum f = new Forum(tfTitleM.getText(),tfDescriptionM.getText());
-                        if (ServiceForum.getInstance().modifForum(f, Integer.parseInt(tfIdM.getText()))) {
+                        Forum f = new Forum(tfTitleM.getText(), tfDescriptionM.getText(),id);
+                        if (ServiceForum.getInstance().modifForum(f)) {
                             Dialog.show("Success", "Connection accepted", new Command("OK"));
                             Preferences.clearAll();
+                            new ListForumsForm().show();
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));
                         }
@@ -59,9 +66,8 @@ public class ModifForumForm extends Form {
 
             }
         });
-
-        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK,
-                e -> previous.showBack()); // Revenir vers l'interface précédente
+  getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ListForumsForm().showBack());
+   
 
     }
 }

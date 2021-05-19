@@ -31,7 +31,7 @@ public class HomeForm extends Form {
         Button btnListForums = new Button("List Forum");
 
         btnAddForum.addActionListener(e -> new AddForumForm(current).show());
-        btnListForums.addActionListener(e -> new ListForumsForm(current).show());
+        //btnListForums.addActionListener(e -> new ListForumsForm(current).show());
         addAll(btnAddForum, btnListForums);
 
     }

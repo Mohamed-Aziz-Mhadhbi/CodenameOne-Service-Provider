@@ -50,6 +50,11 @@ public Forum(int id, String title, String description, int idR) {
         this.description = description;
     }
 
+    public Forum(String title, String description,int id ) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+    }
     public int getId() {
         return id;
     }

@@ -99,17 +99,31 @@ public class ServiceComment {
         NetworkManager.getInstance().addToQueueAndWait(req);
         return resultOK;
     }
-      public void deleteComment(int id) {
+       public void deleteComment(int id) {
         ConnectionRequest req = new ConnectionRequest();
         String url = Statics.BASE_URL + "/deleteCommentJSON/" + id;
         req.setUrl(url);
-        
+
+        // req.setPost(false);
         req.addResponseListener((NetworkEvent evt) -> {
             String str = new String(req.getResponseData());
-            
+
         });
         NetworkManager.getInstance().addToQueueAndWait(req);
-       
+
     }
-      
+        public boolean modifComment(Comment c ) {
+        String url = Statics.BASE_URL+"/updateCommentJSON/"+ c.getId() +"?content=" + c.getContent()+ "&rating=" + c.getRating(); //création de l'URL
+         System.out.println("modif "+c);     
+         req.setUrl(url);
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                resultOK = req.getResponseCode() == 200; 
+                req.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return resultOK;
+    }
 }
