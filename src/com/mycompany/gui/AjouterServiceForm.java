@@ -153,7 +153,7 @@ public class AjouterServiceForm extends BaseForm{
         btnAjouter.addActionListener((e)->{
         
             try {
-                if(title.getText()== "" || descreption.getText()== ""|| prix.getText()== ""){
+                if(title.getText().equals("") || descreption.getText().equals("")|| prix.getText().equals("")){
                     Dialog.show("Verifier les donnes  ,merci.", "","Annuler", "OK");
                 }
                 else {
