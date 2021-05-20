@@ -16,6 +16,7 @@ import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BoxLayout;
 import com.mycompany.entities.Forum;
+import com.mycompany.entities.User;
 import com.mycompany.services.ServiceForum;
 
 /**
@@ -26,7 +27,7 @@ public class ModifForumForm extends Form {
 
     Forum current;
 
-    public ModifForumForm(Form previous, Forum f) {
+    public ModifForumForm(Form previous, Forum f, User user) {
 
         setTitle("Update Forum");
         setLayout(BoxLayout.y());
@@ -54,7 +55,7 @@ public class ModifForumForm extends Form {
                         if (ServiceForum.getInstance().modifForum(f)) {
                             Dialog.show("Success", "Connection accepted", new Command("OK"));
                             Preferences.clearAll();
-                            new ListForumsForm().show();
+                            new ListForumsForm(user).show();
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));
                         }
@@ -66,7 +67,7 @@ public class ModifForumForm extends Form {
 
             }
         });
-  getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ListForumsForm().showBack());
+  getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ListForumsForm(user).showBack());
    
 
     }

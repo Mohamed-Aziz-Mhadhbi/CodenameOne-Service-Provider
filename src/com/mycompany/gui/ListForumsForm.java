@@ -22,6 +22,7 @@ import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BoxLayout;
 import com.mycompany.entities.Forum;
+import com.mycompany.entities.User;
 import com.mycompany.services.ServiceForum;
 import com.mycompany.services.ServicePost;
 import com.mycompany.utils.Statics;
@@ -37,7 +38,7 @@ public class ListForumsForm extends Form {
     public ArrayList<Forum> forums;
     Form current;
 
-    public ListForumsForm() {
+    public ListForumsForm(User user) {
         setTitle("Forum");
         setLayout(BoxLayout.y());
 
@@ -55,7 +56,8 @@ public class ListForumsForm extends Form {
                         Forum f = new Forum(tfTitle.getText(), tfDescription.getText());
                         if (ServiceForum.getInstance().addForum(f)) {
                             Dialog.show("Success", "Connection accepted", new Command("OK"));
-                            new ListForumsForm().show();
+                            new ListForumsForm(user).show();
+                            System.out.println(user.getId());
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));
                         }
@@ -83,7 +85,7 @@ public class ListForumsForm extends Form {
             spTitle.addActionListener(e -> {
                 ServiceForum.getInstance().detailForum(obj.getId());
                 System.out.println("heeeere" + obj.getId());
-                new ListPostForm(current, obj).show();
+                new ListPostForm(current, obj, user).show();
 
             });
             sp.setText("Description : " + obj.getDescription());
@@ -104,10 +106,10 @@ public class ListForumsForm extends Form {
                         System.currentTimeMillis() + 10 * 1000, // fire date/time
                         LocalNotification.REPEAT_MINUTE // Whether to repeat and what frequency
                 );
-                new ListForumsForm().show();
+                new ListForumsForm(user).show();
             });
             Modif.addActionListener((evt) -> {
-                new ModifForumForm(current, obj).show();
+                new ModifForumForm(current, obj, user).show();
 
             });
 

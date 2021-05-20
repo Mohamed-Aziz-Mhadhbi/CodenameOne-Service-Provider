@@ -18,6 +18,7 @@ import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BoxLayout;
 import com.mycompany.entities.Forum;
 import com.mycompany.entities.Post;
+import com.mycompany.entities.User;
 import com.mycompany.services.ServiceForum;
 import com.mycompany.services.ServicePost;
 
@@ -29,7 +30,7 @@ public class ModifPostForm extends Form {
 
     
 
-    public ModifPostForm(Form previous, Post p, Forum f) {
+    public ModifPostForm(Form previous, Post p, Forum f,User user) {
         setTitle("Update Post");
         setLayout(BoxLayout.y());
         System.out.println("Post a modif " + p);
@@ -60,7 +61,7 @@ public class ModifPostForm extends Form {
                             ToastBar.showMessage("Post updated succesfully", FontImage.MATERIAL_INFO);
                             //Dialog.show("Success", "Connection accepted", new Command("OK"));
                             Preferences.clearAll();
-                            new ListPostForm(previous, f).show();
+                            new ListPostForm(previous, f,user).show();
                             
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));

@@ -24,6 +24,7 @@ import com.codename1.ui.Button;
 import com.codename1.ui.CheckBox;
 import com.codename1.ui.Command;
 import com.codename1.ui.Component;
+import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Image;
@@ -114,6 +115,7 @@ public class ProfileForm extends BaseForm {
         
         Button next = new Button("Next");
         
+       
         next.requestFocus();
         next.addActionListener(new ActionListener() {
             @Override
@@ -135,6 +137,7 @@ public class ProfileForm extends BaseForm {
                 }
             }
         });
+        
     }
     
     private void addStringValue(String s, Component v) {

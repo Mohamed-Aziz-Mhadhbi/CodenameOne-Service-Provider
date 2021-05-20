@@ -29,6 +29,7 @@ import com.mycompany.services.ServicePost;
 
 import com.codename1.ui.Container;
 import com.codename1.ui.FontImage;
+import com.mycompany.entities.User;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +41,7 @@ public class ListeCommentForm extends Form {
     public ArrayList<Comment> comments;
     Form current;
 
-    public ListeCommentForm(Form previous, Post p, Forum f) {
+    public ListeCommentForm(Form previous, Post p, Forum f, User user) {
         setTitle("List Comments");
 
         setLayout(BoxLayout.y());
@@ -60,7 +61,8 @@ public class ListeCommentForm extends Form {
                         if (ServiceComment.getInstance().addComment(c, p.getId())) {
                             ServicePost.getInstance().modifPostNOCAdd(p);
                             Dialog.show("connectedd", "succed", new Command("OK"));
-                            new ListeCommentForm(previous, p, f).show();
+                            new ListeCommentForm(previous, p, f, user).show();
+                            System.out.println(user.getId());
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));
                         }
@@ -92,15 +94,15 @@ public class ListeCommentForm extends Form {
                 System.out.println(obj.getId());
                 ServicePost.getInstance().modifPostNOCDelete(p);
                 ServiceComment.getInstance().deleteComment(obj.getId());
-                new ListeCommentForm(previous, p, f).show();
+                new ListeCommentForm(previous, p, f, user).show();
             });
             Modif.addActionListener((ActionEvent evt) -> {
-                new ModifCommentForm(previous, obj, p, f).show();
+                new ModifCommentForm(previous, obj, p, f,user).show();
 
             });
             addAll(box, sp);
         }
-        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ListPostForm(previous, f).showBack());
+        getToolbar().addMaterialCommandToLeftBar("back", FontImage.MATERIAL_ARROW_BACK, e -> new ListPostForm(previous, f, user).showBack());
 
     }
 

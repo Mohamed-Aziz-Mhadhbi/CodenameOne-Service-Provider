@@ -19,6 +19,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.mycompany.entities.Comment;
 import com.mycompany.entities.Forum;
 import com.mycompany.entities.Post;
+import com.mycompany.entities.User;
 import com.mycompany.services.ServiceComment;
 import com.mycompany.services.ServiceForum;
 
@@ -29,7 +30,7 @@ import com.mycompany.services.ServiceForum;
 public class ModifCommentForm extends Form{
      Forum current;
 
-    public ModifCommentForm(Form previous, Comment c,Post p,Forum f) {
+    public ModifCommentForm(Form previous, Comment c,Post p,Forum f,User user) {
 
         setTitle("Update Forum");
         setLayout(BoxLayout.y());
@@ -55,7 +56,7 @@ public class ModifCommentForm extends Form{
                         Comment c = new Comment(tfContentM.getText(), Integer.parseInt(tfRatingM.getText()),id);
                         if (ServiceComment.getInstance().modifComment(c)) {
                             Dialog.show("Success", "Connection accepted", new Command("OK"));
-                            new ListeCommentForm(previous,p,f).show();
+                            new ListeCommentForm(previous,p,f,user).show();
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));
                         }

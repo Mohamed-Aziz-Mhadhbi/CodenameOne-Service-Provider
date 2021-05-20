@@ -25,6 +25,7 @@ import com.codename1.ui.list.GenericListCellRenderer;
 import com.mycompany.entities.Comment;
 import com.mycompany.entities.Forum;
 import com.mycompany.entities.Post;
+import com.mycompany.entities.User;
 import com.mycompany.services.ServiceComment;
 import com.mycompany.services.ServiceForum;
 import com.mycompany.services.ServicePost;
@@ -49,7 +50,7 @@ public class ListPostForm extends Form {
     int RatingC = 0;
     float RatingP = 0;
 
-    public ListPostForm(Form previous, Forum f) {
+    public ListPostForm(Form previous, Forum f, User user) {
         
         setTitle("List Postes");
         
@@ -71,7 +72,8 @@ public class ListPostForm extends Form {
                         Post p = new Post(Title.getText(), Description.getText(), f.getId());
                         if (ServicePost.getInstance().addPost(p, f.getId())) {
                             Dialog.show("connectedd", "succed", new Command("OK"));
-                            new ListPostForm(previous, f).show();
+                            new ListPostForm(previous, f, user).show();
+                            System.out.println(user.getId());
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));
                         }
@@ -125,7 +127,7 @@ public class ListPostForm extends Form {
                 ServicePost.getInstance().detailPost(obj.getId());
                 System.out.println("heeeere" + obj.getId());
                 ServicePost.getInstance().modifPostViews(obj);
-                new ListeCommentForm(previous, obj,f).show();
+                new ListeCommentForm(previous, obj,f,user).show();
                 
             });
             
@@ -135,10 +137,10 @@ public class ListPostForm extends Form {
                 System.out.println(obj.getId());
                 
                 ServicePost.getInstance().deletePost(obj.getId());
-                new ListPostForm(previous, f).show();
+                new ListPostForm(previous, f, user).show();
             });
             Modif.addActionListener((ActionEvent evt) -> {
-                new ModifPostForm(previous, obj,f).show();
+                new ModifPostForm(previous, obj,f,user).show();
                 
             });
             
@@ -146,7 +148,7 @@ public class ListPostForm extends Form {
             RatingP = 0;
         }
         // sp.setText(new ServiceForum().getAllForums().toString());
-        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ListForumsForm().showBack());
+        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ListForumsForm(user).showBack());
     }
 
   
