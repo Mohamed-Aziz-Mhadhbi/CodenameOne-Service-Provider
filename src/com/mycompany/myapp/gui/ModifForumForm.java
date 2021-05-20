@@ -5,6 +5,7 @@
  */
 package com.mycompany.myapp.gui;
 
+import com.codename1.components.ToastBar;
 import com.codename1.io.Preferences;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
@@ -52,9 +53,11 @@ public class ModifForumForm extends Form {
 
                         Forum f = new Forum(tfTitleM.getText(), tfDescriptionM.getText(),id);
                         if (ServiceForum.getInstance().modifForum(f)) {
-                            Dialog.show("Success", "Connection accepted", new Command("OK"));
+                            ToastBar.showMessage("Forum updated succesfully", FontImage.MATERIAL_INFO);
+                           // Dialog.show("Success", "Connection accepted", new Command("OK"));
                             Preferences.clearAll();
                             new ListForumsForm().show();
+                            
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));
                         }

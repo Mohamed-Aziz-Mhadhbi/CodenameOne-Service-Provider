@@ -27,6 +27,7 @@ public class Post {
 
     public Post() {
     }
+    
 
     public Post(int id, String title, String description, int views, int noc, String date, int forum_id) {
         this.id = id;
@@ -51,7 +52,7 @@ public class Post {
         this.views = views;
         this.noc = noc;
         this.date = date;
-        this.forum_id = forum_id;
+        this.forum_id = idF;
         this.idC = idC;
         this.idR = idR;
     }
@@ -91,12 +92,13 @@ public class Post {
         this.noc = noc;
     }
 
-    public Post(int id, String title, String description, int views, int noc) {
+    public Post(int id, String title, String description, int views, int noc, int forum_id) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.views = views;
         this.noc = noc;
+        this.forum_id = forum_id;
     }
 
     public Post(int id, String title, String description, int views, int noc, String date) {

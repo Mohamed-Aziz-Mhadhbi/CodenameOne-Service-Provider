@@ -80,13 +80,6 @@ public class ListPostForm extends Form {
         posts = ServicePost.getInstance().getPosts(f.getId());
         System.out.println(f.getPosts());
 
-        /*for (Post p : f.getPosts()){
-            post.setId(p.getId());
-            post.setTitle(p.getTitle());
-            post.setDescription(p.getDescription());
-             System.out.println("poooostt "+ p);
-            posts.add(p);
-         }*/
         for (Post obj : posts) {
             
             System.out.println("postttt=> " + f.getPosts());
@@ -121,7 +114,7 @@ public class ListPostForm extends Form {
                 new ListPostForm(previous, f).show();
             });
             Modif.addActionListener((ActionEvent evt) -> {
-                new ModifPostForm(previous, obj).show();
+                new ModifPostForm(previous, obj,f).show();
                 
             });
             
@@ -130,7 +123,5 @@ public class ListPostForm extends Form {
         // sp.setText(new ServiceForum().getAllForums().toString());
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ListForumsForm().showBack());
     }
-
-  
     
 }
