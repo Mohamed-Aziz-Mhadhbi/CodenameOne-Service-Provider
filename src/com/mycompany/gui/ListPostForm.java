@@ -22,8 +22,10 @@ import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.list.GenericListCellRenderer;
+import com.mycompany.entities.Comment;
 import com.mycompany.entities.Forum;
 import com.mycompany.entities.Post;
+import com.mycompany.services.ServiceComment;
 import com.mycompany.services.ServiceForum;
 import com.mycompany.services.ServicePost;
 import java.util.ArrayList;
@@ -41,6 +43,11 @@ public class ListPostForm extends Form {
     public ArrayList<Post> posts;
     // static  TextField tfIdF = new TextField();
 //liste des post (forum id ) 
+    public ArrayList<Comment> comments;
+
+    int numbreNoc = 0;
+    int RatingC = 0;
+    float RatingP = 0;
 
     public ListPostForm(Form previous, Forum f) {
         
@@ -82,6 +89,20 @@ public class ListPostForm extends Form {
 
        
         for (Post obj : posts) {
+              comments = ServiceComment.getInstance().getComments(obj.getId());
+            if (!comments.isEmpty()) {
+                for (Comment obj1 : comments) {
+                    numbreNoc++;
+                    RatingC = RatingC + obj1.getRating();
+                    System.out.println("Rating C   :" + RatingC);
+                    System.out.println("nombre de comment  :" + numbreNoc);
+
+                }
+                RatingP = (float) RatingC / numbreNoc;
+                numbreNoc = 0;
+                RatingC = 0;
+                comments.clear();
+            }
             
             System.out.println("postttt=> " + f.getPosts());
             setLayout(BoxLayout.y());
@@ -90,6 +111,8 @@ public class ListPostForm extends Form {
             SpanLabel spDescription = new SpanLabel();
             SpanLabel spviews = new SpanLabel();
             SpanLabel spnoc = new SpanLabel();
+            SpanLabel RatingPost = new SpanLabel();
+            RatingPost.setText(String.valueOf(RatingP));
             
             Button Delete = new Button("D");
             Button Modif = new Button("M");
@@ -119,7 +142,8 @@ public class ListPostForm extends Form {
                 
             });
             
-            addAll(box, spDescription);
+            addAll(box, spDescription,RatingPost);
+            RatingP = 0;
         }
         // sp.setText(new ServiceForum().getAllForums().toString());
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ListForumsForm().showBack());
