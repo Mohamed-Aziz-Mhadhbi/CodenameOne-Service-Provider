@@ -5,6 +5,7 @@
  */
 package com.mycompany.gui;
 
+import com.codename1.components.ToastBar;
 import com.codename1.io.Preferences;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
@@ -28,11 +29,14 @@ public class ModifPostForm extends Form {
 
     
 
-    public ModifPostForm(Form previous, Post p) {
+    public ModifPostForm(Form previous, Post p, Forum f) {
         setTitle("Update Post");
         setLayout(BoxLayout.y());
         System.out.println("Post a modif " + p);
         int id = p.getId();
+        int views = p.getViews();
+        int noc = p.getNoc();
+        int id_Forum = p.getForum_id();
         System.out.println("id Post"+id);
         TextField tfTitleM = new TextField();
         TextField tfDescriptionM = new TextField();
@@ -51,10 +55,13 @@ public class ModifPostForm extends Form {
                 } else {
                     try {
 
-                        Post p = new Post(tfTitleM.getText(), tfDescriptionM.getText(), id);
+                        Post p = new Post( id, tfTitleM.getText(), tfDescriptionM.getText(), views, noc, id_Forum);
                         if (ServicePost.getInstance().modifPost(p)) {
-                            Dialog.show("Success", "Connection accepted", new Command("OK"));
+                            ToastBar.showMessage("Post updated succesfully", FontImage.MATERIAL_INFO);
+                            //Dialog.show("Success", "Connection accepted", new Command("OK"));
                             Preferences.clearAll();
+                            new ListPostForm(previous, f).show();
+                            
                         } else {
                             Dialog.show("ERROR", "Server error", new Command("OK"));
                         }

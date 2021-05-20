@@ -115,7 +115,7 @@ public class ListPostForm extends Form {
                 new ListPostForm(previous, f).show();
             });
             Modif.addActionListener((ActionEvent evt) -> {
-                new ModifPostForm(previous, obj).show();
+                new ModifPostForm(previous, obj,f).show();
                 
             });
             

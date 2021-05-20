@@ -55,6 +55,15 @@ public class Post {
         this.idC = idC;
         this.idR = idR;
     }
+    
+     public Post(int id, String title, String description, int views, int noc, int forum_id) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.views = views;
+        this.noc = noc;
+        this.forum_id = forum_id;
+    }
 
     public Post(int id, String title, int idC, String description, int views, int noc, String date, int forum_id) {
         this.id = id;
