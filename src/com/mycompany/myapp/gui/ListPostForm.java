@@ -22,8 +22,10 @@ import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.list.GenericListCellRenderer;
+import com.mycompany.myapp.entities.Comment;
 import com.mycompany.myapp.entities.Forum;
 import com.mycompany.myapp.entities.Post;
+import com.mycompany.myapp.services.ServiceComment;
 import com.mycompany.myapp.services.ServiceForum;
 import com.mycompany.myapp.services.ServicePost;
 import java.util.ArrayList;
@@ -36,24 +38,29 @@ import java.util.Map;
  * @author ASUS
  */
 public class ListPostForm extends Form {
-    
+
     public ArrayList<Forum> forums;
     public ArrayList<Post> posts;
     // static  TextField tfIdF = new TextField();
 //liste des post (forum id ) 
+    public ArrayList<Comment> comments;
+
+    int numbreNoc = 0;
+    int RatingC = 0;
+    float RatingP = 0;
 
     public ListPostForm(Form previous, Forum f) {
-        
+
         setTitle("List Postes");
-        
+
         setLayout(BoxLayout.y());
-        
+
         TextField Title = new TextField("", "Post Title");
         TextField Description = new TextField("", "description Post");
         Button btnValider = new Button("Add Post");
-        
+
         addAll(Title, Description, btnValider);
-        
+
         btnValider.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -71,9 +78,9 @@ public class ListPostForm extends Form {
                     } catch (NumberFormatException e) {
                         Dialog.show("ERROR", "Status must be a number", new Command("OK"));
                     }
-                    
+
                 }
-                
+
             }
         });
         System.out.println("Id Forum=> " + f.getId());
@@ -81,47 +88,64 @@ public class ListPostForm extends Form {
         System.out.println(f.getPosts());
 
         for (Post obj : posts) {
-            
+            comments = ServiceComment.getInstance().getComments(obj.getId());
+            if (!comments.isEmpty()) {
+                for (Comment obj1 : comments) {
+                    numbreNoc++;
+                    RatingC = RatingC + obj1.getRating();
+                    System.out.println("Rating C   :" + RatingC);
+                    System.out.println("nombre de comment  :" + numbreNoc);
+
+                }
+                RatingP = (float) RatingC / numbreNoc;
+                numbreNoc = 0;
+                RatingC = 0;
+                comments.clear();
+            }
+
             System.out.println("postttt=> " + f.getPosts());
             setLayout(BoxLayout.y());
-            
+
             Button spTitle = new Button();
             SpanLabel spDescription = new SpanLabel();
             SpanLabel spviews = new SpanLabel();
             SpanLabel spnoc = new SpanLabel();
-            
+            SpanLabel RatingPost = new SpanLabel();
+            RatingPost.setText(String.valueOf(RatingP));
+
             Button Delete = new Button("D");
             Button Modif = new Button("M");
-            Container box = BoxLayout.encloseXCenter(spTitle,Delete,Modif,spviews,spnoc);
+            Container box = BoxLayout.encloseXCenter(spTitle, Delete, Modif, spviews, spnoc);
             spviews.setText(Integer.toString(obj.getViews()));
             spnoc.setText(Integer.toString(obj.getNoc()));
-           
+
             spTitle.setText("Title : " + obj.getTitle());
             spTitle.addActionListener(e -> {
                 ServicePost.getInstance().detailPost(obj.getId());
                 System.out.println("heeeere" + obj.getId());
                 ServicePost.getInstance().modifPostViews(obj);
-                new ListeCommentForm(previous, obj,f).show();
-                
+                new ListeCommentForm(previous, obj, f).show();
+
             });
-            
+
             spDescription.setText("Description : " + obj.getDescription());
             Delete.addActionListener(e
                     -> {
                 System.out.println(obj.getId());
-                
+
                 ServicePost.getInstance().deletePost(obj.getId());
                 new ListPostForm(previous, f).show();
             });
             Modif.addActionListener((ActionEvent evt) -> {
-                new ModifPostForm(previous, obj,f).show();
-                
+                new ModifPostForm(previous, obj, f).show();
+
             });
-            
-            addAll(box, spDescription);
+
+            addAll(box, spDescription,RatingPost);
+            RatingP = 0;
         }
         // sp.setText(new ServiceForum().getAllForums().toString());
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ListForumsForm().showBack());
     }
-    
+
 }
