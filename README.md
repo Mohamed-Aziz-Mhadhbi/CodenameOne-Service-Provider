@@ -1,2 +1,2 @@
-# CodenameONE Service-Provider
+# CodenameOne Service Provider (mobile version)
 codenameone PiDev
